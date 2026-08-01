@@ -7,16 +7,12 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' }
 });
 
-// Interceptor para incluir token JWT
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+  if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-// Interceptor para tratar 401
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -44,6 +40,65 @@ export const imoveisApi = {
 export const authApi = {
   login: (data) => api.post('/auth/login', data),
   registrar: (data) => api.post('/auth/registrar', data),
+};
+
+// === Clientes ===
+export const clientesApi = {
+  meuPerfil: () => api.get('/clientes/me'),
+};
+
+// === Favoritos ===
+export const favoritosApi = {
+  listar: (clienteId) => api.get(`/favoritos/${clienteId}`),
+  adicionar: (clienteId, imovelId) => api.post(`/favoritos/${clienteId}/${imovelId}`),
+  remover: (clienteId, imovelId) => api.delete(`/favoritos/${clienteId}/${imovelId}`),
+  verificar: (clienteId, imovelId) => api.get(`/favoritos/${clienteId}/${imovelId}/check`),
+};
+
+// === Visitas ===
+export const visitasApi = {
+  listar: () => api.get('/visitas'),
+  obterPorId: (id) => api.get(`/visitas/${id}`),
+  porCliente: (clienteId) => api.get(`/visitas/cliente/${clienteId}`),
+  porCorretor: (corretorId) => api.get(`/visitas/corretor/${corretorId}`),
+  criar: (data) => api.post('/visitas', data),
+  atualizar: (id, data) => api.put(`/visitas/${id}`, data),
+  cancelar: (id) => api.post(`/visitas/${id}/cancelar`),
+};
+
+// === Contratos ===
+export const contratosApi = {
+  listar: () => api.get('/contratos'),
+  obterPorId: (id) => api.get(`/contratos/${id}`),
+  vencendo: (dias = 30) => api.get(`/contratos/vencendo?dias=${dias}`),
+  criar: (data) => api.post('/contratos', data),
+  atualizar: (id, data) => api.put(`/contratos/${id}`, data),
+  rescindir: (id, motivo) => api.post(`/contratos/${id}/rescindir`, { motivo }),
+  renovar: (id, novaDataFim, novoValor) => api.post(`/contratos/${id}/renovar`, { novaDataFim, novoValor }),
+};
+
+// === Financeiro ===
+export const financeiroApi = {
+  resumo: () => api.get('/financeiro/resumo'),
+  lancamentos: () => api.get('/financeiro/lancamentos'),
+  porPeriodo: (inicio, fim) => api.get(`/financeiro/lancamentos/periodo?inicio=${inicio}&fim=${fim}`),
+  criarLancamento: (data) => api.post('/financeiro/lancamentos', data),
+  atualizarLancamento: (id, data) => api.put(`/financeiro/lancamentos/${id}`, data),
+  pagarLancamento: (id) => api.post(`/financeiro/lancamentos/${id}/pagar`),
+  comissoes: () => api.get('/financeiro/comissoes'),
+  criarComissao: (data) => api.post('/financeiro/comissoes', data),
+  pagarComissao: (id) => api.post(`/financeiro/comissoes/${id}/pagar`),
+};
+
+// === CRM ===
+export const crmApi = {
+  listar: () => api.get('/crm'),
+  obterPorId: (id) => api.get(`/crm/${id}`),
+  criar: (data) => api.post('/crm', data),
+  atualizar: (id, data) => api.put(`/crm/${id}`, data),
+  remover: (id) => api.delete(`/crm/${id}`),
+  registrarContato: (id, data) => api.post(`/crm/${id}/contato`, data),
+  imoveisCompativeis: (id) => api.get(`/crm/${id}/imoveis-compativeis`),
 };
 
 export default api;

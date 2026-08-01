@@ -24,10 +24,22 @@ builder.Services.AddScoped<IProprietarioRepository, ProprietarioRepository>();
 builder.Services.AddScoped<ICorretorRepository, CorretorRepository>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IFavoritoRepository, FavoritoRepository>();
+// V2
+builder.Services.AddScoped<IVisitaRepository, VisitaRepository>();
+builder.Services.AddScoped<IContratoRepository, ContratoRepository>();
+builder.Services.AddScoped<ILancamentoRepository, LancamentoRepository>();
+builder.Services.AddScoped<IComissaoRepository, ComissaoRepository>();
+builder.Services.AddScoped<IInteressadoRepository, InteressadoRepository>();
 
 // === Services ===
 builder.Services.AddScoped<IImovelService, ImovelService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IFavoritoService, FavoritoService>();
+// V2
+builder.Services.AddScoped<IVisitaService, VisitaService>();
+builder.Services.AddScoped<IContratoService, ContratoService>();
+builder.Services.AddScoped<IFinanceiroService, FinanceiroService>();
+builder.Services.AddScoped<ICrmService, CrmService>();
 
 // === JWT Authentication ===
 var jwtSecret = builder.Configuration["Jwt:Secret"] ?? "ChaveSecretaPadrao12345678901234567890";
@@ -71,8 +83,8 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "Imobiliária ERP API",
-        Version = "v1",
-        Description = "API do sistema ERP Imobiliário"
+        Version = "v2",
+        Description = "API do sistema ERP Imobiliário — V2 com Contratos, Financeiro, Visitas, CRM e Favoritos"
     });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

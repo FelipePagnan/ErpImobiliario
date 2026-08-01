@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { imoveisApi } from '../services/api';
+import { imoveisApi, visitasApi } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 import './PropertyDetail.css';
 
 function formatPrice(value) {
@@ -14,8 +15,14 @@ const placeholderImg = 'data:image/svg+xml,' + encodeURIComponent(
 
 export default function PropertyDetail() {
   const { id } = useParams();
+  const { usuario } = useAuth();
   const [imovel, setImovel] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [visitaMsg, setVisitaMsg] = useState(null);
+  const [visitaLoading, setVisitaLoading] = useState(false);
+  const [showVisitaForm, setShowVisitaForm] = useState(false);
+  const [visitaObs, setVisitaObs] = useState('');
+  const [visitaData, setVisitaData] = useState('');
 
   useEffect(() => {
     imoveisApi.obterPorId(id)
@@ -23,6 +30,42 @@ export default function PropertyDetail() {
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [id]);
+
+  const handleSolicitarVisita = async () => {
+    if (!usuario) {
+      setVisitaMsg({ tipo: 'erro', texto: 'Faça login para solicitar uma visita.' });
+      return;
+    }
+
+    setVisitaLoading(true);
+    setVisitaMsg(null);
+
+    try {
+      // Buscar o clienteId do usuário logado
+      const { default: api } = await import('../services/api');
+      const { data: cliente } = await api.get('/clientes/me');
+
+      const payload = {
+        imovelId: id,
+        clienteId: cliente.id,
+        observacoes: visitaObs || null,
+        dataAgendada: visitaData || null,
+      };
+
+      await visitasApi.criar(payload);
+      setVisitaMsg({ tipo: 'sucesso', texto: 'Visita solicitada com sucesso! O corretor entrará em contato.' });
+      setShowVisitaForm(false);
+      setVisitaObs('');
+      setVisitaData('');
+    } catch (err) {
+      const msg = err.response?.status === 404
+        ? 'Seu perfil de cliente não foi encontrado. Entre em contato com a imobiliária.'
+        : err.response?.data?.mensagem || 'Erro ao solicitar visita. Tente novamente.';
+      setVisitaMsg({ tipo: 'erro', texto: msg });
+    } finally {
+      setVisitaLoading(false);
+    }
+  };
 
   if (loading) return <div className="container" style={{ padding: '4rem 0' }}><div className="loading">Carregando...</div></div>;
   if (!imovel) return <div className="container" style={{ padding: '4rem 0' }}><div className="empty-state">Imóvel não encontrado.</div></div>;
@@ -167,9 +210,78 @@ export default function PropertyDetail() {
                 {imovel.corretorTelefone && (
                   <p className="broker-phone">{imovel.corretorTelefone}</p>
                 )}
-                <button className="btn btn-accent" style={{ width: '100%', marginTop: '1rem' }}>
-                  Solicitar visita
-                </button>
+
+                {/* Botão de solicitar visita */}
+                {!showVisitaForm ? (
+                  <button
+                    className="btn btn-accent"
+                    style={{ width: '100%', marginTop: '1rem' }}
+                    onClick={() => {
+                      if (!usuario) {
+                        setVisitaMsg({ tipo: 'erro', texto: 'Faça login para solicitar uma visita.' });
+                        return;
+                      }
+                      setShowVisitaForm(true);
+                      setVisitaMsg(null);
+                    }}
+                  >
+                    Solicitar visita
+                  </button>
+                ) : (
+                  <div className="visita-form fade-in" style={{ marginTop: '1rem' }}>
+                    <div className="form-group">
+                      <label className="form-label">Data preferida (opcional)</label>
+                      <input
+                        type="datetime-local"
+                        className="form-input"
+                        value={visitaData}
+                        onChange={(e) => setVisitaData(e.target.value)}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Observações (opcional)</label>
+                      <textarea
+                        className="form-input"
+                        rows={2}
+                        placeholder="Ex: Prefiro visitar no período da manhã"
+                        value={visitaObs}
+                        onChange={(e) => setVisitaObs(e.target.value)}
+                      />
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <button
+                        className="btn btn-accent"
+                        style={{ flex: 1 }}
+                        onClick={handleSolicitarVisita}
+                        disabled={visitaLoading}
+                      >
+                        {visitaLoading ? 'Enviando...' : 'Confirmar'}
+                      </button>
+                      <button
+                        className="btn btn-outline"
+                        onClick={() => { setShowVisitaForm(false); setVisitaMsg(null); }}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {visitaMsg && (
+                  <div
+                    className={`visita-msg ${visitaMsg.tipo}`}
+                    style={{
+                      marginTop: '0.75rem',
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '6px',
+                      fontSize: '0.85rem',
+                      background: visitaMsg.tipo === 'sucesso' ? '#f0fff4' : '#fff5f5',
+                      color: visitaMsg.tipo === 'sucesso' ? '#2f855a' : '#c53030',
+                    }}
+                  >
+                    {visitaMsg.texto}
+                  </div>
+                )}
               </div>
             )}
 
