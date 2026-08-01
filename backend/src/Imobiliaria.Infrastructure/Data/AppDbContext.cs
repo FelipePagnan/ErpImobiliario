@@ -1,0 +1,97 @@
+using Imobiliaria.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace Imobiliaria.Infrastructure.Data;
+
+public class AppDbContext : DbContext
+{
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
+    public DbSet<Imovel> Imoveis => Set<Imovel>();
+    public DbSet<Endereco> Enderecos => Set<Endereco>();
+    public DbSet<Proprietario> Proprietarios => Set<Proprietario>();
+    public DbSet<Corretor> Corretores => Set<Corretor>();
+    public DbSet<Cliente> Clientes => Set<Cliente>();
+    public DbSet<Usuario> Usuarios => Set<Usuario>();
+    public DbSet<Favorito> Favoritos => Set<Favorito>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        // Imovel
+        modelBuilder.Entity<Imovel>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Titulo).IsRequired().HasMaxLength(200);
+            e.Property(x => x.Codigo).IsRequired().HasMaxLength(30);
+            e.Property(x => x.PrecoVenda).HasColumnType("decimal(18,2)");
+            e.Property(x => x.PrecoLocacao).HasColumnType("decimal(18,2)");
+            e.Property(x => x.ValorCondominio).HasColumnType("decimal(18,2)");
+            e.Property(x => x.ValorIPTU).HasColumnType("decimal(18,2)");
+
+            e.HasOne(x => x.Endereco).WithMany().HasForeignKey(x => x.EnderecoId);
+            e.HasOne(x => x.Proprietario).WithMany(p => p.Imoveis).HasForeignKey(x => x.ProprietarioId);
+            e.HasOne(x => x.Corretor).WithMany(c => c.Imoveis).HasForeignKey(x => x.CorretorId);
+
+            e.HasIndex(x => x.Codigo).IsUnique();
+            e.HasIndex(x => x.Status);
+            e.HasIndex(x => x.Tipo);
+            e.HasIndex(x => x.Finalidade);
+        });
+
+        // Endereco
+        modelBuilder.Entity<Endereco>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Logradouro).IsRequired().HasMaxLength(200);
+            e.Property(x => x.Cidade).IsRequired().HasMaxLength(100);
+            e.Property(x => x.Estado).IsRequired().HasMaxLength(2);
+            e.Property(x => x.CEP).IsRequired().HasMaxLength(10);
+        });
+
+        // Proprietario
+        modelBuilder.Entity<Proprietario>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Nome).IsRequired().HasMaxLength(150);
+            e.Property(x => x.CPFouCNPJ).IsRequired().HasMaxLength(20);
+        });
+
+        // Corretor
+        modelBuilder.Entity<Corretor>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Nome).IsRequired().HasMaxLength(150);
+            e.Property(x => x.CRECI).IsRequired().HasMaxLength(20);
+            e.HasOne(x => x.Usuario).WithMany().HasForeignKey(x => x.UsuarioId);
+        });
+
+        // Cliente
+        modelBuilder.Entity<Cliente>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Nome).IsRequired().HasMaxLength(150);
+            e.HasOne(x => x.Usuario).WithMany().HasForeignKey(x => x.UsuarioId);
+        });
+
+        // Usuario
+        modelBuilder.Entity<Usuario>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Nome).IsRequired().HasMaxLength(150);
+            e.Property(x => x.Email).IsRequired().HasMaxLength(200);
+            e.Property(x => x.SenhaHash).IsRequired();
+            e.HasIndex(x => x.Email).IsUnique();
+        });
+
+        // Favorito
+        modelBuilder.Entity<Favorito>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.HasOne(x => x.Cliente).WithMany(c => c.Favoritos).HasForeignKey(x => x.ClienteId);
+            e.HasOne(x => x.Imovel).WithMany().HasForeignKey(x => x.ImovelId);
+            e.HasIndex(x => new { x.ClienteId, x.ImovelId }).IsUnique();
+        });
+    }
+}

@@ -1,0 +1,121 @@
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+  padding: var(--space-3xl) 0;
+  color: var(--color-text-inverse);
+}
+.hero-content {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--space-md);
+}
+.hero-highlight {
+  color: var(--color-accent);
+}
+.hero-subtitle {
+  font-size: var(--text-lg);
+  color: rgba(255,255,255,0.8);
+  margin-bottom: var(--space-2xl);
+}
+
+/* Search bar */
+.hero-search {
+  display: flex;
+  gap: var(--space-sm);
+  background: var(--color-surface);
+  padding: var(--space-sm);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+.hero-search .form-input,
+.hero-search .form-select {
+  border: none;
+  background: var(--color-surface-hover);
+  border-radius: var(--radius-sm);
+}
+.hero-search .form-input:focus,
+.hero-search .form-select:focus {
+  box-shadow: none;
+  background: var(--color-surface);
+  border: 1px solid var(--color-primary);
+}
+.hero-search .btn {
+  white-space: nowrap;
+  padding: var(--space-sm) var(--space-xl);
+}
+
+@media (max-width: 768px) {
+  .hero-title { font-size: var(--text-2xl); }
+  .hero-search {
+    flex-direction: column;
+  }
+}
+
+/* Sections */
+.section {
+  padding: var(--space-3xl) 0;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: var(--space-2xl);
+  text-align: center;
+}
+
+/* Property grid */
+.property-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-xl);
+}
+
+@media (max-width: 480px) {
+  .property-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Loading */
+.loading,
+.empty-state {
+  text-align: center;
+  padding: var(--space-3xl);
+  color: var(--color-text-muted);
+  font-size: var(--text-lg);
+}
+
+/* Stats */
+.stats-section {
+  background: var(--color-surface);
+  padding: var(--space-2xl) 0;
+  border-top: 1px solid var(--color-border-light);
+}
+.stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3xl);
+  flex-wrap: wrap;
+}
+.stat-item {
+  text-align: center;
+}
+.stat-number {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+.stat-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}

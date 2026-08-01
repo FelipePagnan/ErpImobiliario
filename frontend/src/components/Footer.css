@@ -1,0 +1,26 @@
+.footer {
+  background: var(--color-primary-dark);
+  color: var(--color-text-inverse);
+  padding: var(--space-2xl) 0;
+  margin-top: var(--space-3xl);
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+.footer-logo {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+.footer-desc {
+  color: rgba(255,255,255,0.6);
+  font-size: var(--text-sm);
+  margin-top: var(--space-xs);
+}
+.footer-copy {
+  font-size: var(--text-sm);
+  color: rgba(255,255,255,0.5);
+}
