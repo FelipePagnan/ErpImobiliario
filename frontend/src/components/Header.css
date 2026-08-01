@@ -43,11 +43,21 @@
 .header-user {
   display: flex;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 .user-name {
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
+}
+.user-badge {
+  font-size: 0.65rem;
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  padding: 1px 6px;
+  border-radius: 100px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .btn-sm {

@@ -14,6 +14,8 @@ export default function Header() {
     setMenuOpen(false);
   };
 
+  const isStaff = usuario && ['Administrador', 'Gerente', 'Corretor'].includes(usuario.perfil);
+
   return (
     <header className="header">
       <div className="header-inner container">
@@ -32,11 +34,12 @@ export default function Header() {
 
           {usuario ? (
             <>
-              {(usuario.perfil === 'Administrador' || usuario.perfil === 'Gerente' || usuario.perfil === 'Corretor') && (
+              {isStaff && (
                 <Link to="/admin/dashboard" onClick={() => setMenuOpen(false)}>Painel</Link>
               )}
               <div className="header-user">
                 <span className="user-name">{usuario.nome}</span>
+                <span className="user-badge">{usuario.perfil}</span>
                 <button className="btn btn-outline btn-sm" onClick={handleLogout}>Sair</button>
               </div>
             </>

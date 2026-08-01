@@ -55,3 +55,47 @@ public interface IFavoritoRepository : IRepository<Favorito>
     Task<IEnumerable<Favorito>> ObterPorClienteAsync(Guid clienteId);
     Task<Favorito?> ObterPorClienteEImovelAsync(Guid clienteId, Guid imovelId);
 }
+
+// --- V2 ---
+
+public interface IVisitaRepository : IRepository<Visita>
+{
+    Task<IEnumerable<Visita>> ObterComDetalhesAsync();
+    Task<Visita?> ObterComDetalhesAsync(Guid id);
+    Task<IEnumerable<Visita>> ObterPorClienteAsync(Guid clienteId);
+    Task<IEnumerable<Visita>> ObterPorCorretorAsync(Guid corretorId);
+    Task<IEnumerable<Visita>> ObterPorImovelAsync(Guid imovelId);
+}
+
+public interface IContratoRepository : IRepository<Contrato>
+{
+    Task<IEnumerable<Contrato>> ObterComDetalhesAsync();
+    Task<Contrato?> ObterComDetalhesAsync(Guid id);
+    Task<IEnumerable<Contrato>> ObterPorClienteAsync(Guid clienteId);
+    Task<IEnumerable<Contrato>> ObterPorImovelAsync(Guid imovelId);
+    Task<IEnumerable<Contrato>> ObterVencendoAsync(int dias = 30);
+}
+
+public interface ILancamentoRepository : IRepository<Lancamento>
+{
+    Task<IEnumerable<Lancamento>> ObterComDetalhesAsync();
+    Task<IEnumerable<Lancamento>> ObterPorContratoAsync(Guid contratoId);
+    Task<IEnumerable<Lancamento>> ObterPorPeriodoAsync(DateTime inicio, DateTime fim);
+    Task<IEnumerable<Lancamento>> ObterPendentesAsync();
+}
+
+public interface IComissaoRepository : IRepository<Comissao>
+{
+    Task<IEnumerable<Comissao>> ObterComDetalhesAsync();
+    Task<IEnumerable<Comissao>> ObterPorCorretorAsync(Guid corretorId);
+    Task<IEnumerable<Comissao>> ObterPendentesAsync();
+}
+
+public interface IInteressadoRepository : IRepository<Interessado>
+{
+    Task<IEnumerable<Interessado>> ObterComDetalhesAsync();
+    Task<Interessado?> ObterComDetalhesAsync(Guid id);
+    Task<IEnumerable<Interessado>> BuscarPorPreferenciaAsync(
+        string? cidade, string? bairro, int? tipo, int? finalidade,
+        decimal? precoMin, decimal? precoMax);
+}
