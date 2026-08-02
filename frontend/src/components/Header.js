@@ -15,6 +15,7 @@ export default function Header() {
   };
 
   const isStaff = usuario && ['Administrador', 'Gerente', 'Corretor'].includes(usuario.perfil);
+  const isCliente = usuario && usuario.perfil === 'Cliente';
 
   return (
     <header className="header">
@@ -36,6 +37,12 @@ export default function Header() {
             <>
               {isStaff && (
                 <Link to="/admin/dashboard" onClick={() => setMenuOpen(false)}>Painel</Link>
+              )}
+              {isCliente && (
+                <>
+                  <Link to="/minha-conta/favoritos" onClick={() => setMenuOpen(false)}>Favoritos</Link>
+                  <Link to="/minha-conta/visitas" onClick={() => setMenuOpen(false)}>Minhas Visitas</Link>
+                </>
               )}
               <div className="header-user">
                 <span className="user-name">{usuario.nome}</span>

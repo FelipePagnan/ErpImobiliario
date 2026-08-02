@@ -99,3 +99,8 @@ public interface IInteressadoRepository : IRepository<Interessado>
         string? cidade, string? bairro, int? tipo, int? finalidade,
         decimal? precoMin, decimal? precoMax);
 }
+
+public interface IAuditoriaRepository : IRepository<Auditoria>
+{
+    Task<IEnumerable<Auditoria>> ObterRecentesAsync(int limite = 100);
+}

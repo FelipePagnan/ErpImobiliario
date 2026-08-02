@@ -14,19 +14,18 @@ public class AppDbContext : DbContext
     public DbSet<Cliente> Clientes => Set<Cliente>();
     public DbSet<Usuario> Usuarios => Set<Usuario>();
     public DbSet<Favorito> Favoritos => Set<Favorito>();
-
-    // V2
     public DbSet<Visita> Visitas => Set<Visita>();
     public DbSet<Contrato> Contratos => Set<Contrato>();
     public DbSet<Lancamento> Lancamentos => Set<Lancamento>();
     public DbSet<Comissao> Comissoes => Set<Comissao>();
     public DbSet<Interessado> Interessados => Set<Interessado>();
+    // V3
+    public DbSet<Auditoria> Auditorias => Set<Auditoria>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Imovel
         modelBuilder.Entity<Imovel>(e =>
         {
             e.HasKey(x => x.Id);
@@ -44,118 +43,18 @@ public class AppDbContext : DbContext
             e.HasIndex(x => x.Tipo);
         });
 
-        // Endereco
-        modelBuilder.Entity<Endereco>(e =>
-        {
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Logradouro).IsRequired().HasMaxLength(200);
-            e.Property(x => x.Cidade).IsRequired().HasMaxLength(100);
-            e.Property(x => x.Estado).IsRequired().HasMaxLength(2);
-            e.Property(x => x.CEP).IsRequired().HasMaxLength(10);
-        });
-
-        // Proprietario
-        modelBuilder.Entity<Proprietario>(e =>
-        {
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Nome).IsRequired().HasMaxLength(150);
-            e.Property(x => x.CPFouCNPJ).IsRequired().HasMaxLength(20);
-        });
-
-        // Corretor
-        modelBuilder.Entity<Corretor>(e =>
-        {
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Nome).IsRequired().HasMaxLength(150);
-            e.Property(x => x.CRECI).IsRequired().HasMaxLength(20);
-            e.HasOne(x => x.Usuario).WithMany().HasForeignKey(x => x.UsuarioId);
-        });
-
-        // Cliente
-        modelBuilder.Entity<Cliente>(e =>
-        {
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Nome).IsRequired().HasMaxLength(150);
-            e.HasOne(x => x.Usuario).WithMany().HasForeignKey(x => x.UsuarioId);
-        });
-
-        // Usuario
-        modelBuilder.Entity<Usuario>(e =>
-        {
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Nome).IsRequired().HasMaxLength(150);
-            e.Property(x => x.Email).IsRequired().HasMaxLength(200);
-            e.Property(x => x.SenhaHash).IsRequired();
-            e.HasIndex(x => x.Email).IsUnique();
-        });
-
-        // Favorito
-        modelBuilder.Entity<Favorito>(e =>
-        {
-            e.HasKey(x => x.Id);
-            e.HasOne(x => x.Cliente).WithMany(c => c.Favoritos).HasForeignKey(x => x.ClienteId);
-            e.HasOne(x => x.Imovel).WithMany().HasForeignKey(x => x.ImovelId);
-            e.HasIndex(x => new { x.ClienteId, x.ImovelId }).IsUnique();
-        });
-
-        // === V2 ===
-
-        // Visita
-        modelBuilder.Entity<Visita>(e =>
-        {
-            e.HasKey(x => x.Id);
-            e.HasOne(x => x.Imovel).WithMany().HasForeignKey(x => x.ImovelId);
-            e.HasOne(x => x.Cliente).WithMany().HasForeignKey(x => x.ClienteId);
-            e.HasOne(x => x.Corretor).WithMany().HasForeignKey(x => x.CorretorId);
-            e.HasIndex(x => x.Status);
-        });
-
-        // Contrato
-        modelBuilder.Entity<Contrato>(e =>
-        {
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Codigo).IsRequired().HasMaxLength(30);
-            e.Property(x => x.ValorTotal).HasColumnType("decimal(18,2)");
-            e.Property(x => x.ValorMensal).HasColumnType("decimal(18,2)");
-            e.Property(x => x.MultaRescisao).HasColumnType("decimal(18,2)");
-            e.HasOne(x => x.Imovel).WithMany().HasForeignKey(x => x.ImovelId);
-            e.HasOne(x => x.Cliente).WithMany().HasForeignKey(x => x.ClienteId);
-            e.HasOne(x => x.Corretor).WithMany().HasForeignKey(x => x.CorretorId);
-            e.HasIndex(x => x.Codigo).IsUnique();
-            e.HasIndex(x => x.Status);
-        });
-
-        // Lancamento
-        modelBuilder.Entity<Lancamento>(e =>
-        {
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Descricao).IsRequired().HasMaxLength(300);
-            e.Property(x => x.Valor).HasColumnType("decimal(18,2)");
-            e.HasOne(x => x.Contrato).WithMany(c => c.Lancamentos).HasForeignKey(x => x.ContratoId);
-            e.HasOne(x => x.Imovel).WithMany().HasForeignKey(x => x.ImovelId);
-            e.HasIndex(x => x.DataVencimento);
-            e.HasIndex(x => x.Pago);
-        });
-
-        // Comissao
-        modelBuilder.Entity<Comissao>(e =>
-        {
-            e.HasKey(x => x.Id);
-            e.Property(x => x.ValorBase).HasColumnType("decimal(18,2)");
-            e.Property(x => x.ValorComissao).HasColumnType("decimal(18,2)");
-            e.HasOne(x => x.Corretor).WithMany().HasForeignKey(x => x.CorretorId);
-            e.HasOne(x => x.Contrato).WithMany().HasForeignKey(x => x.ContratoId);
-            e.HasOne(x => x.Imovel).WithMany().HasForeignKey(x => x.ImovelId);
-        });
-
-        // Interessado
-        modelBuilder.Entity<Interessado>(e =>
-        {
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Nome).IsRequired().HasMaxLength(150);
-            e.Property(x => x.OrcamentoMinimo).HasColumnType("decimal(18,2)");
-            e.Property(x => x.OrcamentoMaximo).HasColumnType("decimal(18,2)");
-            e.HasOne(x => x.Cliente).WithMany().HasForeignKey(x => x.ClienteId);
-        });
+        modelBuilder.Entity<Endereco>(e => { e.HasKey(x => x.Id); e.Property(x => x.Logradouro).IsRequired().HasMaxLength(200); e.Property(x => x.Cidade).IsRequired().HasMaxLength(100); e.Property(x => x.Estado).IsRequired().HasMaxLength(2); e.Property(x => x.CEP).IsRequired().HasMaxLength(10); });
+        modelBuilder.Entity<Proprietario>(e => { e.HasKey(x => x.Id); e.Property(x => x.Nome).IsRequired().HasMaxLength(150); e.Property(x => x.CPFouCNPJ).IsRequired().HasMaxLength(20); });
+        modelBuilder.Entity<Corretor>(e => { e.HasKey(x => x.Id); e.Property(x => x.Nome).IsRequired().HasMaxLength(150); e.Property(x => x.CRECI).IsRequired().HasMaxLength(20); e.HasOne(x => x.Usuario).WithMany().HasForeignKey(x => x.UsuarioId); });
+        modelBuilder.Entity<Cliente>(e => { e.HasKey(x => x.Id); e.Property(x => x.Nome).IsRequired().HasMaxLength(150); e.HasOne(x => x.Usuario).WithMany().HasForeignKey(x => x.UsuarioId); });
+        modelBuilder.Entity<Usuario>(e => { e.HasKey(x => x.Id); e.Property(x => x.Nome).IsRequired().HasMaxLength(150); e.Property(x => x.Email).IsRequired().HasMaxLength(200); e.Property(x => x.SenhaHash).IsRequired(); e.HasIndex(x => x.Email).IsUnique(); });
+        modelBuilder.Entity<Favorito>(e => { e.HasKey(x => x.Id); e.HasOne(x => x.Cliente).WithMany(c => c.Favoritos).HasForeignKey(x => x.ClienteId); e.HasOne(x => x.Imovel).WithMany().HasForeignKey(x => x.ImovelId); e.HasIndex(x => new { x.ClienteId, x.ImovelId }).IsUnique(); });
+        modelBuilder.Entity<Visita>(e => { e.HasKey(x => x.Id); e.HasOne(x => x.Imovel).WithMany().HasForeignKey(x => x.ImovelId); e.HasOne(x => x.Cliente).WithMany().HasForeignKey(x => x.ClienteId); e.HasOne(x => x.Corretor).WithMany().HasForeignKey(x => x.CorretorId); });
+        modelBuilder.Entity<Contrato>(e => { e.HasKey(x => x.Id); e.Property(x => x.Codigo).IsRequired().HasMaxLength(30); e.Property(x => x.ValorTotal).HasColumnType("decimal(18,2)"); e.Property(x => x.ValorMensal).HasColumnType("decimal(18,2)"); e.Property(x => x.MultaRescisao).HasColumnType("decimal(18,2)"); e.HasOne(x => x.Imovel).WithMany().HasForeignKey(x => x.ImovelId); e.HasOne(x => x.Cliente).WithMany().HasForeignKey(x => x.ClienteId); e.HasOne(x => x.Corretor).WithMany().HasForeignKey(x => x.CorretorId); e.HasIndex(x => x.Codigo).IsUnique(); });
+        modelBuilder.Entity<Lancamento>(e => { e.HasKey(x => x.Id); e.Property(x => x.Descricao).IsRequired().HasMaxLength(300); e.Property(x => x.Valor).HasColumnType("decimal(18,2)"); e.HasOne(x => x.Contrato).WithMany(c => c.Lancamentos).HasForeignKey(x => x.ContratoId); e.HasOne(x => x.Imovel).WithMany().HasForeignKey(x => x.ImovelId); });
+        modelBuilder.Entity<Comissao>(e => { e.HasKey(x => x.Id); e.Property(x => x.ValorBase).HasColumnType("decimal(18,2)"); e.Property(x => x.ValorComissao).HasColumnType("decimal(18,2)"); e.HasOne(x => x.Corretor).WithMany().HasForeignKey(x => x.CorretorId); e.HasOne(x => x.Contrato).WithMany().HasForeignKey(x => x.ContratoId); e.HasOne(x => x.Imovel).WithMany().HasForeignKey(x => x.ImovelId); });
+        modelBuilder.Entity<Interessado>(e => { e.HasKey(x => x.Id); e.Property(x => x.Nome).IsRequired().HasMaxLength(150); e.Property(x => x.OrcamentoMinimo).HasColumnType("decimal(18,2)"); e.Property(x => x.OrcamentoMaximo).HasColumnType("decimal(18,2)"); e.HasOne(x => x.Cliente).WithMany().HasForeignKey(x => x.ClienteId); });
+        // V3
+        modelBuilder.Entity<Auditoria>(e => { e.HasKey(x => x.Id); e.Property(x => x.Acao).IsRequired().HasMaxLength(100); e.Property(x => x.Entidade).IsRequired().HasMaxLength(100); e.HasIndex(x => x.CriadoEm); e.HasIndex(x => new { x.Entidade, x.EntidadeId }); });
     }
 }
