@@ -8,13 +8,8 @@ export default function Header() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-    setMenuOpen(false);
-  };
-
-  const isStaff = usuario && ['Administrador', 'Gerente', 'Corretor'].includes(usuario.perfil);
+  const handleLogout = () => { logout(); navigate('/'); setMenuOpen(false); };
+  const isStaff = usuario && ['Administrador','Gerente','Corretor'].includes(usuario.perfil);
   const isCliente = usuario && usuario.perfil === 'Cliente';
 
   return (
@@ -22,7 +17,7 @@ export default function Header() {
       <div className="header-inner container">
         <Link to="/" className="header-logo">
           <span className="logo-icon">⌂</span>
-          <span className="logo-text">Imobiliária<span className="logo-accent">ERP</span></span>
+          <span className="logo-text">Pagnan<span className="logo-accent"> Hub</span> Imóveis</span>
         </Link>
 
         <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
@@ -32,18 +27,13 @@ export default function Header() {
         <nav className={`header-nav ${menuOpen ? 'open' : ''}`}>
           <Link to="/" onClick={() => setMenuOpen(false)}>Início</Link>
           <Link to="/imoveis" onClick={() => setMenuOpen(false)}>Imóveis</Link>
-
           {usuario ? (
             <>
-              {isStaff && (
-                <Link to="/admin/dashboard" onClick={() => setMenuOpen(false)}>Painel</Link>
-              )}
-              {isCliente && (
-                <>
-                  <Link to="/minha-conta/favoritos" onClick={() => setMenuOpen(false)}>Favoritos</Link>
-                  <Link to="/minha-conta/visitas" onClick={() => setMenuOpen(false)}>Minhas Visitas</Link>
-                </>
-              )}
+              {isStaff && <Link to="/admin/dashboard" onClick={() => setMenuOpen(false)}>Painel</Link>}
+              {isCliente && (<>
+                <Link to="/minha-conta/favoritos" onClick={() => setMenuOpen(false)}>Favoritos</Link>
+                <Link to="/minha-conta/visitas" onClick={() => setMenuOpen(false)}>Minhas Visitas</Link>
+              </>)}
               <div className="header-user">
                 <span className="user-name">{usuario.nome}</span>
                 <span className="user-badge">{usuario.perfil}</span>

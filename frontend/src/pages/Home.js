@@ -12,10 +12,7 @@ export default function Home() {
 
   useEffect(() => {
     imoveisApi.listar()
-      .then(({ data }) => {
-        const disponiveis = data.filter(i => i.status === 'Disponivel');
-        setDestaques(disponiveis.slice(0, 6));
-      })
+      .then(({ data }) => setDestaques(data.filter(i => i.status === 'Disponivel').slice(0, 6)))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
@@ -31,87 +28,36 @@ export default function Home() {
 
   return (
     <div className="home">
-      {/* Hero */}
       <section className="hero">
         <div className="container hero-content">
-          <h1 className="hero-title">
-            Encontre o imóvel <span className="hero-highlight">ideal</span> para você
-          </h1>
-          <p className="hero-subtitle">
-            Casas, apartamentos, terrenos e muito mais. Seu próximo lar está aqui.
-          </p>
-
+          <h1 className="hero-title">Encontre o imóvel <span className="hero-highlight">ideal</span> para você</h1>
+          <p className="hero-subtitle">Casas, apartamentos, terrenos e muito mais. A Pagnan Hub Imóveis conecta você ao seu próximo lar.</p>
           <form className="hero-search" onSubmit={handleBusca}>
-            <input
-              type="text"
-              className="form-input"
-              placeholder="Cidade..."
-              value={busca.cidade}
-              onChange={(e) => setBusca({ ...busca, cidade: e.target.value })}
-            />
-            <select
-              className="form-select"
-              value={busca.tipo}
-              onChange={(e) => setBusca({ ...busca, tipo: e.target.value })}
-            >
-              <option value="">Tipo</option>
-              <option value="1">Casa</option>
-              <option value="2">Apartamento</option>
-              <option value="3">Cobertura</option>
-              <option value="5">Kitnet</option>
-              <option value="6">Sobrado</option>
-              <option value="7">Terreno</option>
-              <option value="11">Sala Comercial</option>
+            <input type="text" className="form-input" placeholder="Cidade..." value={busca.cidade} onChange={e=>setBusca({...busca,cidade:e.target.value})} />
+            <select className="form-select" value={busca.tipo} onChange={e=>setBusca({...busca,tipo:e.target.value})}>
+              <option value="">Tipo</option><option value="1">Casa</option><option value="2">Apartamento</option>
+              <option value="3">Cobertura</option><option value="5">Kitnet</option><option value="6">Sobrado</option><option value="7">Terreno</option><option value="11">Sala Comercial</option>
             </select>
-            <select
-              className="form-select"
-              value={busca.finalidade}
-              onChange={(e) => setBusca({ ...busca, finalidade: e.target.value })}
-            >
-              <option value="">Finalidade</option>
-              <option value="1">Comprar</option>
-              <option value="2">Alugar</option>
+            <select className="form-select" value={busca.finalidade} onChange={e=>setBusca({...busca,finalidade:e.target.value})}>
+              <option value="">Finalidade</option><option value="1">Comprar</option><option value="2">Alugar</option>
             </select>
             <button type="submit" className="btn btn-accent">Buscar</button>
           </form>
         </div>
       </section>
 
-      {/* Destaques */}
-      <section className="section">
-        <div className="container">
-          <h2 className="section-title">Imóveis em destaque</h2>
-          {loading ? (
-            <div className="loading">Carregando imóveis...</div>
-          ) : destaques.length > 0 ? (
-            <div className="property-grid">
-              {destaques.map((imovel) => (
-                <PropertyCard key={imovel.id} imovel={imovel} />
-              ))}
-            </div>
-          ) : (
-            <p className="empty-state">Nenhum imóvel disponível no momento.</p>
-          )}
-        </div>
-      </section>
+      <section className="section"><div className="container">
+        <h2 className="section-title">Imóveis em destaque</h2>
+        {loading ? <div className="loading">Carregando imóveis...</div> : destaques.length > 0 ? (
+          <div className="property-grid">{destaques.map(im => <PropertyCard key={im.id} imovel={im} />)}</div>
+        ) : <p className="empty-state">Nenhum imóvel disponível no momento.</p>}
+      </div></section>
 
-      {/* Stats */}
-      <section className="stats-section">
-        <div className="container stats-grid">
-          <div className="stat-item">
-            <span className="stat-number">{destaques.length}+</span>
-            <span className="stat-label">Imóveis disponíveis</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-number">2</span>
-            <span className="stat-label">Corretores especializados</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-number">Maringá</span>
-            <span className="stat-label">Região de atuação</span>
-          </div>
-        </div>
-      </section>
+      <section className="stats-section"><div className="container stats-grid">
+        <div className="stat-item"><span className="stat-number">{destaques.length}+</span><span className="stat-label">Imóveis disponíveis</span></div>
+        <div className="stat-item"><span className="stat-number">2</span><span className="stat-label">Corretores especializados</span></div>
+        <div className="stat-item"><span className="stat-number">Maringá</span><span className="stat-label">Região de atuação</span></div>
+      </div></section>
     </div>
   );
 }

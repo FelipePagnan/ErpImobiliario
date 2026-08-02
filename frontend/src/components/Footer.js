@@ -6,11 +6,11 @@ export default function Footer() {
     <footer className="footer">
       <div className="container footer-inner">
         <div className="footer-brand">
-          <span className="footer-logo">⌂ Imobiliária<span className="logo-accent">ERP</span></span>
-          <p className="footer-desc">Sistema de gestão imobiliária completo para sua empresa.</p>
+          <span className="footer-logo">⌂ Pagnan<span className="logo-accent"> Hub</span> Imóveis</span>
+          <p className="footer-desc">Plataforma completa de gestão e busca imobiliária.</p>
         </div>
         <div className="footer-copy">
-          <p>&copy; {new Date().getFullYear()} ImobiliáriaERP. Projeto educacional.</p>
+          <p>&copy; {new Date().getFullYear()} Pagnan Hub Imóveis. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>
