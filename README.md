@@ -288,6 +288,15 @@ Na primeira execução, o banco é criado automaticamente juntamente com dados d
 - ✅ Novos serviços e regras de negócio
 - ✅ Novos endpoints REST documentados no Swagger
 
+## V3 (Beta) — Extras
+
+- ✅ Fotos nos imóveis
+- ✅ CRUD de imóveis no painel
+- ✅ Portal do Cliente
+- ✅ Auditoria
+- ✅ Dashboard com gráficos
+- ✅ Melhorias visuais
+
 ---
 
 # 📈 Roadmap
