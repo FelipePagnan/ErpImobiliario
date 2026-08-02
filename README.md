@@ -297,6 +297,15 @@ Na primeira execução, o banco é criado automaticamente juntamente com dados d
 - ✅ Dashboard com gráficos
 - ✅ Melhorias visuais
 
+## V4 (Oficial) — Pronto
+
+- ✅ Renaming "Pagnan Hub Imóveis"
+- ✅ Favoritar pelo portal
+- ✅ Compartilhamento WhatsApp/link
+- ✅ Pesquisa avançada com ordenação e paginação
+- ✅ Sistema de toast notifications
+- ✅ Testes Unitários
+
 ---
 
 # 📈 Roadmap
