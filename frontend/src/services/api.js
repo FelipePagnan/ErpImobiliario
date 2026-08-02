@@ -25,7 +25,6 @@ api.interceptors.response.use(
   }
 );
 
-// === Imóveis ===
 export const imoveisApi = {
   listar: () => api.get('/imoveis'),
   obterPorId: (id) => api.get(`/imoveis/${id}`),
@@ -36,18 +35,15 @@ export const imoveisApi = {
   dashboard: () => api.get('/imoveis/dashboard'),
 };
 
-// === Auth ===
 export const authApi = {
   login: (data) => api.post('/auth/login', data),
   registrar: (data) => api.post('/auth/registrar', data),
 };
 
-// === Clientes ===
 export const clientesApi = {
   meuPerfil: () => api.get('/clientes/me'),
 };
 
-// === Favoritos ===
 export const favoritosApi = {
   listar: (clienteId) => api.get(`/favoritos/${clienteId}`),
   adicionar: (clienteId, imovelId) => api.post(`/favoritos/${clienteId}/${imovelId}`),
@@ -55,7 +51,6 @@ export const favoritosApi = {
   verificar: (clienteId, imovelId) => api.get(`/favoritos/${clienteId}/${imovelId}/check`),
 };
 
-// === Visitas ===
 export const visitasApi = {
   listar: () => api.get('/visitas'),
   obterPorId: (id) => api.get(`/visitas/${id}`),
@@ -66,7 +61,6 @@ export const visitasApi = {
   cancelar: (id) => api.post(`/visitas/${id}/cancelar`),
 };
 
-// === Contratos ===
 export const contratosApi = {
   listar: () => api.get('/contratos'),
   obterPorId: (id) => api.get(`/contratos/${id}`),
@@ -77,7 +71,6 @@ export const contratosApi = {
   renovar: (id, novaDataFim, novoValor) => api.post(`/contratos/${id}/renovar`, { novaDataFim, novoValor }),
 };
 
-// === Financeiro ===
 export const financeiroApi = {
   resumo: () => api.get('/financeiro/resumo'),
   lancamentos: () => api.get('/financeiro/lancamentos'),
@@ -90,7 +83,6 @@ export const financeiroApi = {
   pagarComissao: (id) => api.post(`/financeiro/comissoes/${id}/pagar`),
 };
 
-// === CRM ===
 export const crmApi = {
   listar: () => api.get('/crm'),
   obterPorId: (id) => api.get(`/crm/${id}`),
@@ -99,6 +91,11 @@ export const crmApi = {
   remover: (id) => api.delete(`/crm/${id}`),
   registrarContato: (id, data) => api.post(`/crm/${id}/contato`, data),
   imoveisCompativeis: (id) => api.get(`/crm/${id}/imoveis-compativeis`),
+};
+
+export const auditoriaApi = {
+  listar: (limite = 200) => api.get(`/auditoria?limite=${limite}`),
+  porEntidade: (entidade, id) => api.get(`/auditoria/${entidade}/${id}`),
 };
 
 export default api;
