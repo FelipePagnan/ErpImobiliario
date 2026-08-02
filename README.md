@@ -132,6 +132,20 @@ O sistema já vem com 8 imóveis cadastrados em Maringá/PR:
 - ✅ Layout responsivo
 - ✅ Swagger configurado
 
+## V2 (Beta) —  Novidades
+
+- ✅ Sistema de favoritos de imóveis
+- ✅ Gestão completa de visitas
+- ✅ Gestão de contratos (criação, renovação e rescisão)
+- ✅ Controle financeiro (lançamentos e pagamentos)
+- ✅ Gestão de comissões imobiliárias
+- ✅ CRM para interessados e contatos
+- ✅ Compatibilidade entre imóveis e interessados
+- ✅ Novas páginas administrativas (Visitas, Contratos, Financeiro e CRM)
+- ✅ Navegação administrativa expandida
+- ✅ Novos serviços e regras de negócio
+- ✅ Novos endpoints REST documentados no Swagger
+
 ## Próximas versões (planejado)
 
 - Módulo de Contratos
