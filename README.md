@@ -1,122 +1,264 @@
-# ERP Imobiliário + Portal Web
+# 🏠 ERP Imobiliário + Portal Web
 
-Sistema ERP Imobiliário completo com API em .NET 8 e portal web em React.
+Sistema **ERP Imobiliário** desenvolvido com **.NET 8** e **React**, composto por uma API REST e um portal web para gerenciamento completo de imóveis, clientes, visitas, contratos, financeiro e relacionamento com interessados (CRM).
 
-## Tecnologias
-
-**Backend:** .NET 8, ASP.NET Core Web API, Entity Framework Core, SQLite, JWT  
-**Frontend:** React 18, JavaScript, React Router, Axios  
-**Arquitetura:** Clean Architecture (Domain, Application, Infrastructure, API)
+O projeto foi desenvolvido utilizando **Clean Architecture**, promovendo a separação de responsabilidades entre domínio, aplicação, infraestrutura e apresentação, além de autenticação via JWT, persistência com SQLite e documentação automática da API utilizando Swagger.
 
 ---
 
-## Como Rodar
+# 💻 Funcionalidades
 
-### Pré-requisitos
+### Portal Público
+- Listagem de imóveis disponíveis
+- Visualização detalhada dos imóveis
+- Pesquisa e filtros avançados
+- Sistema de login
+- Cadastro de usuários
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [Node.js 18+](https://nodejs.org/)
+### Gestão Imobiliária
+- Cadastro, edição e exclusão de imóveis
+- Gestão de clientes
+- Dashboard administrativo
+- Controle de disponibilidade dos imóveis
+- Controle de acesso por perfil
 
-### 1. Backend (API)
+### CRM
+- Cadastro de interessados
+- Registro de contatos
+- Preferências de imóveis
+- Compatibilidade entre imóveis e interessados
+- Sistema de favoritos
+
+### Gestão de Visitas
+- Agendamento de visitas
+- Listagem de visitas
+- Marcação como realizada
+- Cancelamento de visitas
+
+### Gestão de Contratos
+- Criação de contratos
+- Renovação de contratos
+- Rescisão de contratos
+- Atualização automática do status do imóvel
+
+### Financeiro
+- Controle de lançamentos
+- Registro de pagamentos
+- Gestão de comissões
+- Resumo financeiro
+
+### API
+- API REST documentada com Swagger
+- Autenticação JWT
+- Autorização baseada em perfis (Roles)
+- Endpoints para todos os módulos do sistema
+
+---
+
+# 🏗️ Arquitetura
+
+O projeto segue os princípios da **Clean Architecture**, separando regras de negócio, casos de uso, acesso aos dados e apresentação.
+
+```text
+ERP-Imobiliario
+│
+├── backend
+│   ├── Imobiliaria.Domain
+│   ├── Imobiliaria.Application
+│   ├── Imobiliaria.Infrastructure
+│   └── Imobiliaria.API
+│
+└── frontend
+    ├── components
+    ├── contexts
+    ├── pages
+    ├── services
+    └── styles
+```
+
+## Responsabilidades
+
+### Domain
+
+Camada responsável pelo núcleo da aplicação.
+
+- Entidades
+- Enums
+- Interfaces
+- Regras de negócio
+
+### Application
+
+Responsável pelos casos de uso da aplicação.
+
+- DTOs
+- Services
+- Interfaces de serviços
+
+### Infrastructure
+
+Responsável pelo acesso aos dados.
+
+- Entity Framework Core
+- SQLite
+- Repositórios
+- DbContext
+- Seed inicial
+
+### API
+
+Camada responsável pela exposição dos serviços.
+
+- Controllers REST
+- Swagger
+- JWT Authentication
+- Injeção de Dependência
+
+### Frontend
+
+Portal desenvolvido em React.
+
+- Portal público
+- Área administrativa
+- Dashboard
+- Consumo da API via Axios
+
+---
+
+# 🛠️ Tecnologias Utilizadas
+
+### Backend
+
+- .NET 8
+- ASP.NET Core Web API
+- Entity Framework Core
+- SQLite
+- JWT Authentication
+- Swagger / OpenAPI
+
+### Frontend
+
+- React 18
+- JavaScript
+- React Router
+- Axios
+- CSS
+
+### Arquitetura
+
+- Clean Architecture
+- Repository Pattern
+- Dependency Injection
+
+---
+
+# 📂 Principais Recursos
+
+### Gestão de Imóveis
+
+Gerenciamento completo de imóveis com cadastro, atualização, filtros e controle de disponibilidade.
+
+### CRM
+
+Controle de interessados, favoritos, contatos e preferências de imóveis.
+
+### Contratos
+
+Gerenciamento do ciclo completo dos contratos, incluindo renovação e rescisão com atualização automática do imóvel.
+
+### Financeiro
+
+Controle de lançamentos financeiros, pagamentos e comissões.
+
+### Portal Web
+
+Área pública para consulta de imóveis e painel administrativo para gerenciamento do ERP.
+
+### Segurança
+
+Autenticação JWT e autorização baseada em perfis para controle de acesso às funcionalidades administrativas.
+
+---
+
+# 🚀 Como Executar
+
+## Pré-requisitos
+
+- .NET 8 SDK
+- Node.js 18+
+
+## 1. Backend
 
 ```bash
 cd backend
 
-# Restaurar pacotes
 dotnet restore
 
-# Rodar a API (porta 5000)
 cd src/Imobiliaria.API
+
 dotnet run
 ```
 
-A API estará disponível em: `http://localhost:5000`  
-Swagger UI: `http://localhost:5000/swagger`
+A API estará disponível em:
 
-O banco SQLite (`imobiliaria.db`) é criado automaticamente na primeira execução com dados de exemplo.
+```
+http://localhost:5000
+```
 
-### 2. Frontend (React)
+Swagger:
+
+```
+http://localhost:5000/swagger
+```
+
+O banco SQLite é criado automaticamente na primeira execução juntamente com os dados de demonstração.
+
+---
+
+## 2. Frontend
 
 ```bash
 cd frontend
 
-# Instalar dependências
 npm install
 
-# Rodar (porta 3000)
 npm start
 ```
 
-O portal estará disponível em: `http://localhost:3000`
-
----
-
-## Contas de Demonstração
-
-| Perfil        | E-mail                     | Senha        |
-|---------------|----------------------------|--------------|
-| Administrador | admin@imobiliaria.com      | admin123     |
-| Gerente       | gerente@imobiliaria.com    | gerente123   |
-| Corretor      | carlos@imobiliaria.com     | corretor123  |
-| Corretor      | ana@imobiliaria.com        | corretor123  |
-| Cliente       | joao@email.com             | cliente123   |
-
----
-
-## Estrutura do Projeto
+O portal estará disponível em:
 
 ```
-ERP-Imobiliario/
-├── backend/
-│   ├── Imobiliaria.sln
-│   └── src/
-│       ├── Imobiliaria.Domain/          # Entidades, Enums, Interfaces
-│       ├── Imobiliaria.Application/     # DTOs, Services, Interfaces
-│       ├── Imobiliaria.Infrastructure/  # DbContext, Repositories, Seed
-│       └── Imobiliaria.API/             # Controllers, Program.cs
-└── frontend/
-    ├── public/
-    └── src/
-        ├── components/    # Header, Footer, PropertyCard
-        ├── contexts/      # AuthContext
-        ├── pages/         # Home, PropertyList, PropertyDetail, Login, Dashboard
-        ├── services/      # api.js (Axios)
-        └── styles/        # CSS variables e global
+http://localhost:3000
 ```
 
 ---
 
-## API Endpoints
+# 👥 Contas de Demonstração
 
-### Auth
-- `POST /api/auth/login` — Login (retorna JWT)
-- `POST /api/auth/registrar` — Registrar novo usuário
-
-### Imóveis
-- `GET /api/imoveis` — Listar todos
-- `GET /api/imoveis/{id}` — Obter por ID
-- `GET /api/imoveis/filtrar?cidade=&tipo=&finalidade=` — Filtrar
-- `GET /api/imoveis/dashboard` — Dados do dashboard (autenticado)
-- `POST /api/imoveis` — Criar (Admin/Gerente)
-- `PUT /api/imoveis/{id}` — Atualizar (Admin/Gerente/Corretor)
-- `DELETE /api/imoveis/{id}` — Remover (Admin)
+| Perfil | E-mail | Senha |
+|---------|---------|--------|
+| Administrador | admin@imobiliaria.com | admin123 |
+| Gerente | gerente@imobiliaria.com | gerente123 |
+| Corretor | carlos@imobiliaria.com | corretor123 |
+| Corretor | ana@imobiliaria.com | corretor123 |
+| Cliente | joao@email.com | cliente123 |
 
 ---
 
-## Dados de Exemplo (Seed)
+# 🗄️ Banco de Dados
 
-O sistema já vem com 8 imóveis cadastrados em Maringá/PR:
+O sistema utiliza **SQLite** como banco de dados local.
 
-1. Casa com piscina — Venda R$ 850.000
-2. Apartamento 2 quartos — Locação R$ 2.200/mês
-3. Sobrado condomínio fechado — Venda R$ 620.000
-4. Cobertura duplex — Venda R$ 1.200.000 / Locação R$ 6.500/mês
-5. Kitnet centro — Locação R$ 800/mês
-6. Terreno 450m² — Venda R$ 280.000
-7. Sala comercial — Locação R$ 1.800/mês
-8. Casa 2 quartos (alugada) — Locação R$ 1.400/mês
+Na primeira execução, o banco é criado automaticamente juntamente com dados de demonstração para facilitar os testes da aplicação, incluindo:
+
+- Usuários
+- Imóveis
+- Clientes
+- Dados iniciais do sistema
 
 ---
+
+# 📦 Evolução do Projeto
 
 ## V1 (Beta) — O que está incluso
 
@@ -132,7 +274,7 @@ O sistema já vem com 8 imóveis cadastrados em Maringá/PR:
 - ✅ Layout responsivo
 - ✅ Swagger configurado
 
-## V2 (Beta) —  Novidades
+## V2 (Beta) — Novidades
 
 - ✅ Sistema de favoritos de imóveis
 - ✅ Gestão completa de visitas
@@ -146,14 +288,35 @@ O sistema já vem com 8 imóveis cadastrados em Maringá/PR:
 - ✅ Novos serviços e regras de negócio
 - ✅ Novos endpoints REST documentados no Swagger
 
-## Próximas versões (planejado)
+---
 
-- Módulo de Contratos
-- Módulo Financeiro
-- CRM (favoritos, preferências, notificações)
-- Gestão de Visitas
-- Upload de fotos e documentos
-- Auditoria
-- Relatórios
-- Portal do Cliente separado
-"# ErpImobiliario" 
+# 📈 Roadmap
+
+- [ ] Upload de imagens para imóveis
+- [ ] Upload de documentos de contratos
+- [ ] Relatórios em PDF
+- [ ] Dashboard com gráficos
+- [ ] Notificações por e-mail
+- [ ] Docker
+- [ ] Migração para SQL Server
+- [ ] Testes automatizados
+
+---
+
+# 👨‍💻 Autor
+
+**Felipe Pagnan**
+
+Software Engineer especializado em desenvolvimento .NET, arquitetura de software e aplicações web.
+
+**LinkedIn**
+
+https://www.linkedin.com/in/felipe-pagnan/
+
+---
+
+# 📄 Licença
+
+Este projeto está sob a licença **Pagnan**.
+
+Sinta-se à vontade para estudar, utilizar como referência e contribuir com melhorias.
